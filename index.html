@@ -115,7 +115,7 @@
     <!-- Máquina Tragamonedas -->
     <div class="slot-machine-container w-full max-w-4xl p-6 md:p-10 mb-8">
         <div class="grid grid-cols-3 gap-4 mb-2 text-center text-yellow-500 font-bold tracking-wider text-sm md:text-base">
-            <div>PAÍS</div>
+            <div>NACIONALIDAD</div>
             <div>EQUIPO</div>
             <div>COMPETICIÓN</div>
         </div>
@@ -134,7 +134,7 @@
 
     <div class="text-center w-full max-w-md">
         <button onclick="spin()" id="spinBtn" class="bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-bold py-4 px-12 rounded-full text-2xl shadow-lg transform active:scale-95 transition-all w-full border-4 border-yellow-700 casino-font tracking-widest">
-            ¡GENERAR DESAFÍO!
+            ¡MEZCLAR DESAFÍO!
         </button>
     </div>
 
@@ -144,7 +144,7 @@
 
             <h3 class="text-yellow-400 text-xl font-bold mb-4 uppercase">Tu Misión:</h3>
             <p class="text-white text-xl md:text-2xl mb-6 leading-relaxed">
-                "Nombra un jugador de <span id="resCountry" class="text-cyan-400 font-bold"></span> que haya jugado en <span id="resTeam" class="text-green-400 font-bold"></span> disputando la <span id="resComp" class="text-pink-400 font-bold"></span>"
+                "Nombra un jugador de nacionalidad <span id="resCountry" class="text-cyan-400 font-bold"></span> que haya jugado en <span id="resTeam" class="text-green-400 font-bold"></span> disputando la <span id="resComp" class="text-pink-400 font-bold"></span>"
             </p>
             
             <div class="flex justify-center mb-6">
@@ -164,13 +164,24 @@
                     <button onclick="verifyPlayer()" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded font-bold transition-colors whitespace-nowrap">Verificar ✨</button>
                 </div>
 
-                <div class="flex gap-2 justify-center text-sm">
-                    <button onclick="getHint()" class="text-slate-400 hover:text-yellow-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-yellow-400"><i class="fas fa-lightbulb mr-1"></i> Pista ✨</button>
-                    <button onclick="getSolution()" class="text-slate-400 hover:text-green-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-green-400"><i class="fas fa-key mr-1"></i> Solución ✨</button>
+                <!-- Botones de Utilidad IA -->
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                     <button onclick="getHint()" class="text-slate-400 hover:text-yellow-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-yellow-400 text-sm"><i class="fas fa-lightbulb mr-1"></i> Pedir Pista</button>
+                     <button onclick="getSolution()" class="text-slate-400 hover:text-green-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-green-400 text-sm"><i class="fas fa-key mr-1"></i> Ver Solución</button>
+                </div>
+
+                <!-- Nuevas Funciones Creativas IA -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="narrateIntro()" class="bg-slate-700 hover:bg-blue-600 text-white transition-colors py-2 px-3 rounded text-sm font-semibold flex justify-center items-center gap-2">
+                        <i class="fas fa-microphone-alt"></i> Narrar Intro ✨
+                    </button>
+                    <button onclick="suggestTactics()" class="bg-slate-700 hover:bg-indigo-600 text-white transition-colors py-2 px-3 rounded text-sm font-semibold flex justify-center items-center gap-2">
+                        <i class="fas fa-clipboard-list"></i> Táctica DT ✨
+                    </button>
                 </div>
 
                 <div id="aiResponseBox" class="hidden mt-4 bg-slate-900/50 p-4 rounded-lg border border-purple-500/30 text-left text-sm">
-                    <div id="aiLoading" class="hidden text-center text-purple-400"><span class="ai-loader mr-2"></span> Consultando al VAR...</div>
+                    <div id="aiLoading" class="hidden text-center text-purple-400"><span class="ai-loader mr-2"></span> Consultando a la IA...</div>
                     <div id="aiContent" class="text-slate-200"></div>
                 </div>
             </div>
@@ -246,12 +257,20 @@
             const lever = document.getElementById('leverBall');
             if(lever) { lever.style.transform = "translateY(80px)"; setTimeout(() => lever.style.transform = "translateY(0)", 300); }
 
+            // Lógica MEZCLADA (Modo Scout)
             const countries = Object.keys(soccerDB);
             const randomCountry = countries[Math.floor(Math.random() * countries.length)];
-            const countryData = soccerDB[randomCountry];
-            const randomTeamObj = countryData.teams[Math.floor(Math.random() * countryData.teams.length)];
+
+            let allTeamsList = [];
+            Object.keys(soccerDB).forEach(countryKey => {
+                const data = soccerDB[countryKey];
+                data.teams.forEach(t => {
+                    allTeamsList.push({ name: t.name, comps: data.comps });
+                });
+            });
+            const randomTeamObj = allTeamsList[Math.floor(Math.random() * allTeamsList.length)];
             const randomTeam = randomTeamObj.name;
-            const possibleComps = countryData.comps;
+            const possibleComps = randomTeamObj.comps;
             const randomComp = possibleComps[Math.floor(Math.random() * possibleComps.length)];
 
             currentChallenge = { country: randomCountry, team: randomTeam, comp: randomComp };
@@ -294,7 +313,7 @@
         }
 
         async function callGemini(promptText) {
-            const apiKey = getApiKey(); // Pide la llave aquí
+            const apiKey = getApiKey(); 
             if (!apiKey) return;
 
             const box = document.getElementById('aiResponseBox');
@@ -328,22 +347,45 @@
             }
         }
 
+        // --- FUNCIONES IA ORIGINALES ---
         function verifyPlayer() {
             const player = document.getElementById('playerInput').value.trim();
             if (!player) return alert("Escribe un nombre.");
             clearInterval(timerInterval);
-            const prompt = `Actúa como un experto en historia del fútbol. Usuario dice que "${player}" jugó en "${currentChallenge.team}" (${currentChallenge.country}) en la competición "${currentChallenge.comp}". Responde SI o NO y una frase breve.`;
+            const prompt = `Actúa como un experto en fútbol. El usuario dice que el jugador "${player}" es de nacionalidad "${currentChallenge.country}", jugó en el equipo "${currentChallenge.team}" y participó en la competición "${currentChallenge.comp}".
+            1. Verifica la NACIONALIDAD del jugador (¿Es de ${currentChallenge.country}?).
+            2. Verifica si jugó en ese EQUIPO.
+            3. Verifica si jugó esa COMPETICIÓN con ese equipo.
+            Responde SI o NO y una explicación muy breve. Si la nacionalidad no coincide, dilo claramente.`;
             callGemini(prompt);
         }
 
         function getHint() {
-            const prompt = `Dame una pista críptica sobre un jugador del "${currentChallenge.team}" que haya jugado "${currentChallenge.comp}". Máximo 2 frases. NO digas el nombre.`;
+            const prompt = `Dame una pista sobre un jugador de nacionalidad "${currentChallenge.country}" que haya jugado en "${currentChallenge.team}" y la competición "${currentChallenge.comp}". Máximo 2 frases. NO digas el nombre. Si no existe ninguno famoso, di "Es un reto muy difícil".`;
             callGemini(prompt);
         }
 
         function getSolution() {
             clearInterval(timerInterval);
-            const prompt = `Lista 3 jugadores famosos de "${currentChallenge.team}" que hayan jugado "${currentChallenge.comp}".`;
+            const prompt = `Lista hasta 3 jugadores de nacionalidad "${currentChallenge.country}" que hayan jugado en "${currentChallenge.team}" disputando la "${currentChallenge.comp}". Si no hay ninguno, di "No existen registros comunes".`;
+            callGemini(prompt);
+        }
+
+        // --- NUEVAS FUNCIONES IA (CREATIVAS) ---
+        function narrateIntro() {
+            const prompt = `Actúa como un narrador de fútbol apasionado (estilo latinoamericano o europeo).
+            Escribe una INTRODUCCIÓN ÉPICA y muy breve (máximo 40 palabras) para un partido crucial donde juega el **${currentChallenge.team}** en la **${currentChallenge.comp}**.
+            Debes mencionar que hay un jugador clave de nacionalidad **${currentChallenge.country}** en el campo que se roba las miradas.
+            Usa exclamaciones y emojis de fútbol.`;
+            callGemini(prompt);
+        }
+
+        function suggestTactics() {
+            const prompt = `Actúa como un Director Técnico experto (tipo Guardiola o Klopp).
+            Para ganar la **${currentChallenge.comp}** con el equipo **${currentChallenge.team}**, sugiere:
+            1. La formación táctica ideal (ej: 4-3-3, 3-5-2).
+            2. Una frase clave sobre el estilo de juego necesario.
+            Mantén la respuesta corta y directa.`;
             callGemini(prompt);
         }
 
