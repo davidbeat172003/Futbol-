@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruleta de Desafíos de Fútbol + AI</title>
+    <title>Ruleta de Campeones + IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -89,7 +89,6 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Botón de configuración de API */
         .api-config-btn {
             position: fixed; top: 10px; right: 10px;
             background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;
@@ -107,9 +106,9 @@
     <!-- Encabezado -->
     <header class="text-center mb-8 mt-4">
         <h1 class="text-5xl casino-font text-yellow-400 drop-shadow-lg">
-            <i class="fas fa-futbol mr-2"></i> SCOUT MASTER <i class="fas fa-futbol ml-2"></i>
+            <i class="fas fa-trophy mr-2"></i> CHAMPION HUNTER <i class="fas fa-trophy ml-2"></i>
         </h1>
-        <p class="text-slate-400 mt-2 text-lg">Gira la ruleta y desafía a la IA</p>
+        <p class="text-slate-400 mt-2 text-lg">Solo para verdaderos ganadores</p>
     </header>
 
     <!-- Máquina Tragamonedas -->
@@ -134,17 +133,17 @@
 
     <div class="text-center w-full max-w-md">
         <button onclick="spin()" id="spinBtn" class="bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-bold py-4 px-12 rounded-full text-2xl shadow-lg transform active:scale-95 transition-all w-full border-4 border-yellow-700 casino-font tracking-widest">
-            ¡MEZCLAR DESAFÍO!
+            ¡BUSCAR CAMPEÓN!
         </button>
     </div>
 
     <div id="resultArea" class="mt-8 w-full max-w-2xl hidden mb-10">
         <div class="challenge-card bg-slate-800 border border-slate-700 rounded-xl p-6 text-center shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-purple-600 opacity-10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-600 opacity-10 rounded-full blur-3xl pointer-events-none"></div>
 
             <h3 class="text-yellow-400 text-xl font-bold mb-4 uppercase">Tu Misión:</h3>
             <p class="text-white text-xl md:text-2xl mb-6 leading-relaxed">
-                "Nombra un jugador de nacionalidad <span id="resCountry" class="text-cyan-400 font-bold"></span> que haya jugado en <span id="resTeam" class="text-green-400 font-bold"></span> disputando la <span id="resComp" class="text-pink-400 font-bold"></span>"
+                "Nombra un jugador de nacionalidad <span id="resCountry" class="text-cyan-400 font-bold"></span> que haya <span class="text-yellow-500 font-bold underline">GANADO</span> la <span id="resComp" class="text-pink-400 font-bold"></span> con el <span id="resTeam" class="text-green-400 font-bold"></span>"
             </p>
             
             <div class="flex justify-center mb-6">
@@ -156,32 +155,22 @@
             <hr class="border-slate-700 my-4">
 
             <div class="mt-4">
-                <p class="text-sm text-purple-400 mb-2 font-bold tracking-widest uppercase"><i class="fas fa-robot mr-1"></i> Asistente IA</p>
+                <p class="text-sm text-yellow-600 mb-2 font-bold tracking-widest uppercase"><i class="fas fa-robot mr-1"></i> Juez IA</p>
                 
                 <div class="flex gap-2 mb-3">
-                    <input type="text" id="playerInput" placeholder="Escribe el nombre..." 
-                           class="w-full bg-slate-900 border border-slate-600 rounded px-4 py-2 text-white focus:outline-none focus:border-purple-500">
-                    <button onclick="verifyPlayer()" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded font-bold transition-colors whitespace-nowrap">Verificar ✨</button>
+                    <input type="text" id="playerInput" placeholder="Nombre del campeón..." 
+                           class="w-full bg-slate-900 border border-slate-600 rounded px-4 py-2 text-white focus:outline-none focus:border-yellow-500">
+                    <button onclick="verifyPlayer()" class="bg-yellow-600 hover:bg-yellow-500 text-black px-4 py-2 rounded font-bold transition-colors whitespace-nowrap">Verificar 🏆</button>
                 </div>
 
-                <!-- Botones de Utilidad IA -->
+                <!-- Botones de Utilidad IA (Simplificados) -->
                 <div class="grid grid-cols-2 gap-2 mb-2">
-                     <button onclick="getHint()" class="text-slate-400 hover:text-yellow-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-yellow-400 text-sm"><i class="fas fa-lightbulb mr-1"></i> Pedir Pista</button>
-                     <button onclick="getSolution()" class="text-slate-400 hover:text-green-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-green-400 text-sm"><i class="fas fa-key mr-1"></i> Ver Solución</button>
+                     <button onclick="getHint()" class="text-slate-400 hover:text-yellow-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-yellow-400 text-sm"><i class="fas fa-lightbulb mr-1"></i> Pista</button>
+                     <button onclick="getSolution()" class="text-slate-400 hover:text-green-400 transition-colors py-2 px-3 border border-slate-700 rounded hover:border-green-400 text-sm"><i class="fas fa-key mr-1"></i> Ver Campeones</button>
                 </div>
 
-                <!-- Nuevas Funciones Creativas IA -->
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="narrateIntro()" class="bg-slate-700 hover:bg-blue-600 text-white transition-colors py-2 px-3 rounded text-sm font-semibold flex justify-center items-center gap-2">
-                        <i class="fas fa-microphone-alt"></i> Narrar Intro ✨
-                    </button>
-                    <button onclick="suggestTactics()" class="bg-slate-700 hover:bg-indigo-600 text-white transition-colors py-2 px-3 rounded text-sm font-semibold flex justify-center items-center gap-2">
-                        <i class="fas fa-clipboard-list"></i> Táctica DT ✨
-                    </button>
-                </div>
-
-                <div id="aiResponseBox" class="hidden mt-4 bg-slate-900/50 p-4 rounded-lg border border-purple-500/30 text-left text-sm">
-                    <div id="aiLoading" class="hidden text-center text-purple-400"><span class="ai-loader mr-2"></span> Consultando a la IA...</div>
+                <div id="aiResponseBox" class="hidden mt-4 bg-slate-900/50 p-4 rounded-lg border border-yellow-500/30 text-left text-sm">
+                    <div id="aiLoading" class="hidden text-center text-yellow-400"><span class="ai-loader mr-2"></span> Verificando palmarés...</div>
                     <div id="aiContent" class="text-slate-200"></div>
                 </div>
             </div>
@@ -212,6 +201,7 @@
         }
 
         // --- BASE DE DATOS DE FÚTBOL ---
+        // (Base de datos para Equipos y Competencias - Se mantiene "normal")
         const soccerDB = {
             "España 🇪🇸": {
                 teams: [{ name: "Real Madrid", type: "top" }, { name: "FC Barcelona", type: "top" }, { name: "Atlético Madrid", type: "top" }, { name: "Sevilla", type: "mid" }, { name: "Real Betis", type: "mid" }],
@@ -238,8 +228,17 @@
                 comps: ["Brasileirao", "Copa do Brasil", "Copa Libertadores", "Copa Sudamericana"]
             }
         };
+        
+        // --- LISTA EXTENDIDA DE NACIONALIDADES ---
+        // Esta lista alimenta SOLO el primer reel, independiente de donde jueguen los equipos.
+        const extraNationalities = [
+            "Colombia 🇨🇴", "Uruguay 🇺🇾", "Francia 🇫🇷", "Portugal 🇵🇹", 
+            "Países Bajos 🇳🇱", "Nigeria 🇳🇬", "Croacia 🇭🇷", "Bélgica 🇧🇪",
+            "Senegal 🇸🇳", "Marruecos 🇲🇦", "Chile 🇨🇱", "México 🇲🇽",
+            "Noruega 🇳🇴", "Ecuador 🇪🇨", "Paraguay 🇵🇾"
+        ];
 
-        const fillerIcons = ["⚽", "👟", "🥅", "🧤", "🚩", " whistle"];
+        const fillerIcons = ["🏆", "🥇", "⚽", "⭐", "🎉", "🔥"];
         let isSpinning = false;
         let timerInterval;
         let currentChallenge = { country: "", team: "", comp: "" };
@@ -257,10 +256,14 @@
             const lever = document.getElementById('leverBall');
             if(lever) { lever.style.transform = "translateY(80px)"; setTimeout(() => lever.style.transform = "translateY(0)", 300); }
 
-            // Lógica MEZCLADA (Modo Scout)
-            const countries = Object.keys(soccerDB);
-            const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+            // --- LÓGICA DE SELECCIÓN ---
+            
+            // 1. Reel Nacionalidad: Combinamos las naciones de la DB con las extras
+            const dbCountries = Object.keys(soccerDB);
+            const allNationalities = [...dbCountries, ...extraNationalities];
+            const randomCountry = allNationalities[Math.floor(Math.random() * allNationalities.length)];
 
+            // 2. Reel Equipo: Seleccionamos de la base de datos "normal" (Europa/Latam)
             let allTeamsList = [];
             Object.keys(soccerDB).forEach(countryKey => {
                 const data = soccerDB[countryKey];
@@ -270,11 +273,14 @@
             });
             const randomTeamObj = allTeamsList[Math.floor(Math.random() * allTeamsList.length)];
             const randomTeam = randomTeamObj.name;
+            
+            // 3. Reel Competición: Válida para ese equipo
             const possibleComps = randomTeamObj.comps;
             const randomComp = possibleComps[Math.floor(Math.random() * possibleComps.length)];
 
             currentChallenge = { country: randomCountry, team: randomTeam, comp: randomComp };
 
+            // Animación
             const reels = [
                 { id: 'reel-country', finalVal: randomCountry, icon: '🏳️' },
                 { id: 'reel-team', finalVal: randomTeam, icon: '🛡️' },
@@ -299,7 +305,7 @@
             setTimeout(() => {
                 clearInterval(spinInterval);
                 strip.classList.remove('blur-spin');
-                strip.innerHTML = `<div class="reel-item" style="animation: bounceIn 0.3s"><span class="reel-icon text-indigo-600">${finalIcon}</span><span class="reel-text text-slate-800">${finalText}</span></div>`;
+                strip.innerHTML = `<div class="reel-item" style="animation: bounceIn 0.3s"><span class="reel-icon text-yellow-500">${finalIcon}</span><span class="reel-text text-slate-800">${finalText}</span></div>`;
             }, duration);
         }
 
@@ -335,11 +341,11 @@
                 if (!response.ok) throw new Error("Error en la respuesta de API");
 
                 const data = await response.json();
-                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No pude obtener respuesta. Verifica tu API Key.";
+                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No pude obtener respuesta.";
                 const formattedText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 content.innerHTML = formattedText;
             } catch (error) {
-                content.innerHTML = "<span class='text-red-400'>Error de conexión. Puede que tu API Key sea incorrecta o haya expirado. <br><u onclick='resetApiKey()' style='cursor:pointer'>Haz clic aquí para cambiar la Key</u>.</span>";
+                content.innerHTML = "<span class='text-red-400'>Error de conexión. Verifica tu API Key.</span>";
                 console.error(error);
             } finally {
                 loader.classList.add('hidden');
@@ -347,45 +353,41 @@
             }
         }
 
-        // --- FUNCIONES IA ORIGINALES ---
+        // --- FUNCIONES IA (SOLO CAMPEONES) ---
         function verifyPlayer() {
             const player = document.getElementById('playerInput').value.trim();
             if (!player) return alert("Escribe un nombre.");
             clearInterval(timerInterval);
-            const prompt = `Actúa como un experto en fútbol. El usuario dice que el jugador "${player}" es de nacionalidad "${currentChallenge.country}", jugó en el equipo "${currentChallenge.team}" y participó en la competición "${currentChallenge.comp}".
-            1. Verifica la NACIONALIDAD del jugador (¿Es de ${currentChallenge.country}?).
-            2. Verifica si jugó en ese EQUIPO.
-            3. Verifica si jugó esa COMPETICIÓN con ese equipo.
-            Responde SI o NO y una explicación muy breve. Si la nacionalidad no coincide, dilo claramente.`;
+            
+            const prompt = `Actúa como un experto en historia del fútbol.
+            Usuario pregunta por: "${player}".
+            Reto: Jugador de nacionalidad "${currentChallenge.country}", que haya GANADO la competición "${currentChallenge.comp}" jugando para el equipo "${currentChallenge.team}".
+            
+            Pasos de verificación estricta:
+            1. ¿La nacionalidad es ${currentChallenge.country}?
+            2. ¿GANÓ (fue Campeón) la ${currentChallenge.comp} con ${currentChallenge.team}?
+            
+            Si cumple TODO: Responde "¡SÍ! ES CAMPEÓN 🏆" y menciona el año.
+            Si la nacionalidad falla: "Incorrecto. No es de esa nacionalidad".
+            Si jugó pero NO ganó: "Incorrecto. Jugó ahí pero NO ganó ese título".
+            Si nunca jugó ahí: "Incorrecto. Nunca jugó en ese equipo".
+            Si la combinación es imposible (nadie lo ha logrado): Indícalo.
+            
+            Respuesta corta en Español.`;
+            
             callGemini(prompt);
         }
 
         function getHint() {
-            const prompt = `Dame una pista sobre un jugador de nacionalidad "${currentChallenge.country}" que haya jugado en "${currentChallenge.team}" y la competición "${currentChallenge.comp}". Máximo 2 frases. NO digas el nombre. Si no existe ninguno famoso, di "Es un reto muy difícil".`;
+            const prompt = `Dame una pista sobre un jugador de nacionalidad "${currentChallenge.country}" que haya sido CAMPEÓN de la "${currentChallenge.comp}" con el equipo "${currentChallenge.team}".
+            Máximo 2 frases. NO digas el nombre. Si crees que no existe ningún campeón con esa combinación exacta, di: "Es un reto extremadamente difícil, quizás imposible".`;
             callGemini(prompt);
         }
 
         function getSolution() {
             clearInterval(timerInterval);
-            const prompt = `Lista hasta 3 jugadores de nacionalidad "${currentChallenge.country}" que hayan jugado en "${currentChallenge.team}" disputando la "${currentChallenge.comp}". Si no hay ninguno, di "No existen registros comunes".`;
-            callGemini(prompt);
-        }
-
-        // --- NUEVAS FUNCIONES IA (CREATIVAS) ---
-        function narrateIntro() {
-            const prompt = `Actúa como un narrador de fútbol apasionado (estilo latinoamericano o europeo).
-            Escribe una INTRODUCCIÓN ÉPICA y muy breve (máximo 40 palabras) para un partido crucial donde juega el **${currentChallenge.team}** en la **${currentChallenge.comp}**.
-            Debes mencionar que hay un jugador clave de nacionalidad **${currentChallenge.country}** en el campo que se roba las miradas.
-            Usa exclamaciones y emojis de fútbol.`;
-            callGemini(prompt);
-        }
-
-        function suggestTactics() {
-            const prompt = `Actúa como un Director Técnico experto (tipo Guardiola o Klopp).
-            Para ganar la **${currentChallenge.comp}** con el equipo **${currentChallenge.team}**, sugiere:
-            1. La formación táctica ideal (ej: 4-3-3, 3-5-2).
-            2. Una frase clave sobre el estilo de juego necesario.
-            Mantén la respuesta corta y directa.`;
+            const prompt = `Lista hasta 3 jugadores de nacionalidad "${currentChallenge.country}" que hayan GANADO (Campeones) la "${currentChallenge.comp}" con el equipo "${currentChallenge.team}".
+            Si no existe ninguno, di: "No hay registros de un campeón de esa nacionalidad con ese equipo en ese torneo".`;
             callGemini(prompt);
         }
 
